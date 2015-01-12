@@ -183,7 +183,7 @@ namespace Yohoho_Gangplank
             {
                 if (W.IsReady())
                 {
-                    Game.PrintChat("AutoW");
+                   // Game.PrintChat("AutoW");
                     W.Cast();
                 }
             }
@@ -201,14 +201,14 @@ namespace Yohoho_Gangplank
 
                 if (Config.Item("UseQKs").GetValue<bool>() && !target.IsDead && Q.IsReady() && !target.IsAlly && Player.Distance(target.Position) < Q.Range && Player.GetSpellDamage(target, SpellSlot.Q) > (target.Health + 20))
                 {
-                    Game.PrintChat("Qks");
+                    //Game.PrintChat("Qks");
                     Q.CastOnUnit(target);
                 }
 
 
                 if (Config.Item("UseRKs").GetValue<bool>() && R.IsReady() && !target.IsDead && !target.IsAlly && Player.Distance(target.Position) < R.Range && Player.GetSpellDamage(target, SpellSlot.R) > (target.Health))
                 {
-                    Game.PrintChat("Rks");
+                    //Game.PrintChat("Rks");
                     R.Cast(target);
                 }
 
