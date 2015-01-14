@@ -158,6 +158,7 @@ namespace Nocturne
             //Misc
             Config.AddSubMenu(new Menu("Misc", "Misc"));
             Config.SubMenu("Misc").AddItem(new MenuItem("AutoI", "Auto Ignite KS").SetValue(true));
+            Config.SubMenu("Misc").AddItem(new MenuItem("AutoWB", "Auto W Block Targeted Spell").SetValue(true));
 
             //Drawings
             Config.AddSubMenu(new Menu("Drawings", "Drawings"));
@@ -171,7 +172,39 @@ namespace Nocturne
             Game.OnGameUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
            Drawing.OnEndScene += Drawing_OnEndScene;
+           Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
 
+        }
+
+        private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsValid<Obj_AI_Hero>())
+            {
+                return;
+            }
+
+            if (!Config.Item("AutoWB").GetValue<bool>())
+            {
+                return;
+            }
+
+            if (!sender.IsEnemy)
+            {
+                return;
+            }
+
+            if (args.Target == null || !args.Target.IsValid || !args.Target.IsMe)
+            {
+                return;
+            }
+
+            if (args.SData.IsAutoAttack())
+            {
+                return;
+            }
+
+            //Delay the Cast a bit to make it look more human
+            Utility.DelayAction.Add(100, () => W.Cast());
         }
 
 
@@ -258,7 +291,7 @@ namespace Nocturne
             if (R.IsReady() && target.IsValidTarget(GetRRange()))
             {
                 R.Cast();
-                R.CastOnUnit(target);
+                Utility.DelayAction.Add(600, () =>R.CastOnUnit(target));
             }
         }
 
