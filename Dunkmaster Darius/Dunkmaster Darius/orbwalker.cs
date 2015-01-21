@@ -6,7 +6,7 @@ using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-namespace AlienHack_YiSharp
+namespace Dunkmaster_Darius
 {
     // ReSharper disable once InconsistentNaming
     public class xSLxOrbwalker

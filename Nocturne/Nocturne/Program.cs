@@ -388,7 +388,7 @@ namespace Nocturne
             var health = (100 * (Player.Mana / Player.MaxMana)) < Config.Item("healthJ").GetValue<Slider>().Value;
             var mana = (100 * (Player.Mana / Player.MaxMana)) < Config.Item("manaJ").GetValue<Slider>().Value;
             string[] jungleMinions;
-            if (Utility.Map.GetMap()._MapType.Equals(Utility.Map.MapType.TwistedTreeline))
+            if (Utility.Map.GetMap().Type.Equals(Utility.Map.MapType.TwistedTreeline))
             {
                 jungleMinions = new string[] { "TT_Spiderboss", "TT_NWraith", "TT_NGolem", "TT_NWolf" };
             }
@@ -407,7 +407,7 @@ namespace Nocturne
 
                 foreach (Obj_AI_Base minion in minions)
                 {
-                    if (Utility.Map.GetMap()._MapType.Equals(Utility.Map.MapType.TwistedTreeline) &&
+                    if (Utility.Map.GetMap().Type.Equals(Utility.Map.MapType.TwistedTreeline) &&
                         minion.Health <= smiteDmg &&
                         jungleMinions.Any(name => minion.Name.Substring(0, minion.Name.Length - 5).Equals(name)))
                     {
@@ -541,9 +541,9 @@ namespace Nocturne
             var iusemppotion = Config.Item("usemppotions").GetValue<bool>();
             var iusepotionmp = Player.Mana <=
                                (Player.MaxMana * (Config.Item("usepotionmp").GetValue<Slider>().Value) / 100);
-            if (Utility.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
+            if (Utility.InFountain(Player) || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (Utility.CountEnemysInRange(800) > 0 ||
+            if (Utility.CountEnemysInRange(mobs.FirstOrDefault() , 800) > 0 ||
                 (mobs.Count > 0 && Config.Item("ActiveJungle").GetValue<KeyBind>().Active && (Items.HasItem(1039) ||
                   SmiteRed.Any(i => Items.HasItem(i)) || SmitePurple.Any(i => Items.HasItem(i)) ||
                   SmiteBlue.Any(i => Items.HasItem(i)) || SmiteGrey.Any(i => Items.HasItem(i))

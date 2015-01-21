@@ -72,6 +72,15 @@ namespace AlienHack_YiSharp
             Config.SubMenu("Combo").AddItem(new MenuItem("UseECombo", "Use E").SetValue(true));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseRCombo", "USe R").SetValue(true));
 
+
+            //Don't Ulti
+            Config.AddSubMenu(new Menu("DontUlt", "DontUlt"));
+            foreach (Obj_AI_Hero enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.Team != Player.Team))
+                Config
+                    .SubMenu("DontUlt")
+                    .AddItem(new MenuItem("DontUlt" + enemy.BaseSkinName, enemy.BaseSkinName, true).SetValue(false));
+
+
             //Misc
             Config.AddSubMenu(new Menu("Misc", "Misc"));
             Config.SubMenu("Misc").AddItem(new MenuItem("AutoTiamat", "Auto Tiamat").SetValue(true));
@@ -141,6 +150,8 @@ namespace AlienHack_YiSharp
                 }
             }
         }
+
+
 
 
         private static int getQRange()
@@ -278,6 +289,14 @@ namespace AlienHack_YiSharp
             return false;
         }
 
+        private static bool rTarget(Obj_AI_Hero target)
+        {
+            if ((Config.Item("DontUlt" + target.BaseSkinName, true) != null &&
+                 Config.Item("DontUlt" + target.BaseSkinName, true).GetValue<bool>() == false))
+                return true;
+            return false;
+        }
+
         private static void Game_OnGameUpdate(EventArgs args)
         {
             switch (xSLxOrbwalker.CurrentMode)
@@ -308,7 +327,7 @@ namespace AlienHack_YiSharp
                     var hero in from hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsValidTarget(R.Range) && hero.IsEnemy && !hero.IsDead && IsSupport(hero))
                                 select hero)
                  {
-                     if (hero != null)
+                     if (hero != null && rTarget(hero))
                      {
                          R.CastOnUnit(hero);
                      }
@@ -389,7 +408,7 @@ namespace AlienHack_YiSharp
             float tempmaxhp = 0.0f;
             foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) <= R.Range && x.IsEnemy && !x.IsDead))
             { 
-                if (target != null)
+                if (target != null && rTarget(target))
                 {
                    if (target.MaxHealth > tempmaxhp ){
                        tempmaxhp = target.MaxHealth;

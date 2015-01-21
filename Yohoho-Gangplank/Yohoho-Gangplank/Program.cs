@@ -206,7 +206,7 @@ namespace Yohoho_Gangplank
                 }
 
 
-                if (Config.Item("UseRKs").GetValue<bool>() && R.IsReady() && !target.IsDead && !target.IsAlly && Player.Distance(target.Position) < R.Range && Player.GetSpellDamage(target, SpellSlot.R) > (target.Health))
+                if (Config.Item("UseRKs").GetValue<bool>() && R.IsReady() && !target.IsDead && !target.IsAlly && Player.Distance(target.Position) < R.Range && Player.GetSpellDamage(target, SpellSlot.R) > (target.Health) && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
                 {
                     //Game.PrintChat("Rks");
                     R.Cast(target);
